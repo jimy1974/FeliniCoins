@@ -1,0 +1,48 @@
+<!-- views/result.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">        
+        <!-- Buttons for Navigation -->
+        <div class="top-buttons">
+            <a href="/" class="subtle-btn">Home</a>
+            <a href="/withdraw" class="subtle-btn">Withdraw Tokens</a>
+            <a href="https://stellarterm.com/exchange/FELNY-GCXDWF3K3J2T7ROWH7BBTZHG3DMKAVJBQB5M73OOMOU65HQBZVWVCCAI/XLM-native" class="subtle-btn" target="_blank">Sell Tokens</a>
+            <a href="/about" class="subtle-btn">About the Token</a>
+            <% if (user) { %>
+                <a href="/logout" class="subtle-btn">Logout</a>
+            <% } else { %>
+                <a href="/auth/google" class="subtle-btn">Login</a>
+            <% } %>
+        </div>
+
+        <h1>Result</h1>
+
+        <% if (isCorrect) { %>
+            <p class="success">Correct! You earned <%= reward %> FELNY!</p>
+        <% } else { %>
+            <p class="failure">Incorrect. Better luck next time!</p>
+        <% } %>
+
+        <p><strong>Explanation:</strong> <%= explanation %></p>
+
+        <!-- Updated Balance -->
+        <div class="wallet-info">
+            <h2>Your FELNY Balance</h2>
+            <p>
+                <strong><%= balance %> FELNY</strong>
+            </p>
+        </div>
+
+        <!-- Next Step -->
+        <a href="/start" class="btn">Next Question</a>
+    </div>
+</body>
+</html>

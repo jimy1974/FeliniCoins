@@ -1,0 +1,216 @@
+/* public/css/styles.css */
+
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: linear-gradient(135deg, #0d0d2b, #3423a6); /* Purple with depth */
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.95);  /* Lighter, more opaque background */
+    color: #0f1020;  /* Dark text for contrast */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.btn {
+    background: linear-gradient(45deg, #ffd700, #ffcc5c); /* Gold for FeliniCoin vibe */
+    color: #000; /* Dark text for contrast */
+    border: none;
+    transition: transform 0.3s ease;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 204, 92, 0.4);
+}
+
+.game-info {
+    background-color: rgba(26, 41, 128, 0.1);
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+    transform: scale(1.2); /* Make radio buttons slightly larger */
+}
+
+.choice {
+    margin: 10px 0;
+}
+
+.question h2 {
+    font-size: 1.4rem;
+    color: #000000; /* Highlight question text */
+}
+
+.success {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+.failure {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.wallet-info h2, .wallet-info h3 {
+    color: #3423a6; /* Match the FeliniCoin theme */
+}
+
+.rules ul {
+    list-style-position: inside; /* Ensures bullets are aligned with text */
+    margin: 0 auto; /* Centers the list as a whole */
+    padding: 0; /* Removes default padding */
+    text-align: left; /* Aligns text to the left */
+    max-width: 400px; /* Optional: Limits the width of the list */
+}
+
+.rules ul li {
+    margin-bottom: 10px; /* Adds spacing between list items */
+    line-height: 1.6; /* Adjusts line height for readability */
+}
+
+#loader {
+    font-size: 16px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#actionButton:disabled::after {
+    content: '...';
+    display: inline-block;
+    margin-left: 10px;
+    animation: spin 1s linear infinite;
+}
+
+
+.top-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.top-buttons .btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.top-buttons .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 204, 92, 0.4);
+}
+
+.subtle-btn {
+    background-color: rgba(52, 35, 166, 0.1); /* Subtle background */
+    color: #3423a6; /* Text matches theme */
+    border: 1px solid rgba(52, 35, 166, 0.3); /* Subtle border */
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+
+.subtle-btn:hover {
+    background-color: rgba(52, 35, 166, 0.2); /* Slightly darker on hover */
+    transform: scale(1.03);
+}
+
+.header-with-image h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 24px; /* Adjusted font size for title */
+}
+
+.title-icon {
+    
+    vertical-align: middle;
+}
+
+
+
+.wallet-address {
+    word-break: break-word; /* Break long words */
+    overflow-wrap: break-word;
+    white-space: nowrap; /* Prevent wrapping */
+    overflow: hidden; /* Hide overflow */
+    text-overflow: ellipsis; /* Add ellipsis for overflowed text */
+    max-width: 100%; /* Ensure it fits the container */
+    display: inline-block;
+}
+
+
+    .loading h2 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .loading-dots {
+        display: inline-block;
+    }
+
+    .dot {
+        width: 8px;
+        height: 8px;
+        margin: 0 2px;
+        background-color: #000;
+        border-radius: 50%;
+        display: inline-block;
+        animation: bounce 1.5s infinite;
+    }
+
+    .dot:nth-child(1) {
+        animation-delay: 0s;
+    }
+
+    .dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes bounce {
+        0%, 80%, 100% {
+            transform: scale(0);
+        }
+        40% {
+            transform: scale(1);
+        }
+    }

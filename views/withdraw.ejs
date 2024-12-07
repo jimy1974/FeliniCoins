@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw Tokens</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        /* Inline styles for improved layout and input box */
+        .form-group label {
+            display: block; /* Place the label on its own line */
+            margin-bottom: 0.5em; /* Add spacing below the label */
+        }
+        .form-group input {
+            width: 100%; /* Make the input box fill the container */
+            padding: 0.8em; /* Add padding for better usability */
+            font-size: 1.1em; /* Increase font size for easier readability */
+            border: 1px solid #ccc; /* Add a subtle border */
+            border-radius: 5px; /* Add rounded corners */
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Add a subtle inset shadow */
+        }
+        .form-group input:focus {
+            border-color: #007BFF; /* Highlight border when focused */
+            outline: none; /* Remove default focus outline */
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a blue glow */
+        }
+        .btn {
+            font-size: 1em;
+            padding: 0.6em 1.2em;
+            background-color: #007BFF; /* Primary button color */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Buttons for Navigation -->
+        <div class="top-buttons">
+            <a href="/" class="subtle-btn">Home</a>
+            <a href="/withdraw" class="subtle-btn">Withdraw Tokens</a>
+            <a href="https://stellarterm.com/exchange/FELNY-GCXDWF3K3J2T7ROWH7BBTZHG3DMKAVJBQB5M73OOMOU65HQBZVWVCCAI/XLM-native" class="subtle-btn" target="_blank">Sell Tokens</a>
+            <a href="/about" class="subtle-btn">About the Token</a>
+            <% if (user) { %>
+                <a href="/logout" class="subtle-btn">Logout</a>
+            <% } else { %>
+                <a href="/auth/google" class="subtle-btn">Login</a>
+            <% } %>
+        </div>
+        
+        <h1>Withdraw FELNY Tokens</h1>
+        <p>Total Winnings: <strong><%= balance %> FELNY</strong></p>
+
+        <form action="/process-withdrawal" method="POST">
+            <div class="form-group">
+                <label for="walletAddress">Stellar Wallet Address:</label>
+                <input type="text" id="walletAddress" name="walletAddress" value="<%= defaultAddress || '' %>" required>
+            </div>
+            <button type="submit" class="btn">Withdraw</button>
+        </form>
+
+        <!-- Trustline Setup Section -->
+        <div class="trustline-info">
+            <h3>Important:</h3>
+            <p>
+                Before withdrawing, ensure your Stellar wallet has a <strong>trustline</strong> set up for FELNY.
+            </p>
+            <p>
+                <a href="https://stellarterm.com/exchange/FELNY-GCXDWF3K3J2T7ROWH7BBTZHG3DMKAVJBQB5M73OOMOU65HQBZVWVCCAI/XLM-native" target="_blank" >
+                    Click here to add the trustline for FELNY
+                </a>
+            </p>
+        </div>
+    </div>
+    <script>
+        // Optional: Add dynamic behavior using JavaScript
+        document.addEventListener('DOMContentLoaded', function () {
+            const balance = <%= balance %>; // Dynamically rendered value from the server
+            const withdrawButton = document.querySelector('.btn[type="submit"]');
+
+            if (balance === 0) {
+                withdrawButton.disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>

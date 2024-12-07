@@ -1,0 +1,119 @@
+<!-- views/game.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Question</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Buttons for Navigation -->
+        <div class="top-buttons">
+            <a href="/" class="subtle-btn">Home</a>
+            <a href="/withdraw" class="subtle-btn">Withdraw Tokens</a>
+            <a href="https://stellarterm.com/exchange/FELNY-GCXDWF3K3J2T7ROWH7BBTZHG3DMKAVJBQB5M73OOMOU65HQBZVWVCCAI/XLM-native" class="subtle-btn" target="_blank">Sell Tokens</a>
+            <a href="/about" class="subtle-btn">About the Token</a>
+            <% if (user) { %>
+                <a href="/logout" class="subtle-btn">Logout</a>
+            <% } else { %>
+                <a href="/auth/google" class="subtle-btn">Login</a>
+            <% } %>
+        </div>
+
+        <!-- Header with Logo -->
+        <div class="header-with-image">
+            <h1>
+                <img src="/images/FeliniCoin_small.png" alt="FeliniCoin Logo" class="title-icon">
+                FeliniCoin
+            </h1>
+        </div>
+        <p>Answer the question below to earn <strong>FELNY</strong> tokens!</p>
+
+        <!-- Loading Message -->
+        <div id="loading-message" class="loading">
+            <h2>
+                Loading question<span class="loading-dots">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </span>
+            </h2>
+        </div>
+
+
+        <!-- Question Section (hidden initially) -->
+        <div id="question-section" class="question" style="display: none;">
+            <h2 id="question-text"></h2>
+            <form action="/answer" method="post">
+                <input type="hidden" name="token" id="token">
+                <div id="options"></div>
+                <button type="submit" class="btn" disabled>Submit Answer</button>
+            </form>
+        </div>
+
+        <!-- User's Token Balance -->
+        <div class="wallet-info">
+            <h2>Your FELNY Balance</h2>
+            <p>
+                <strong><%= balance %> FELNY</strong>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const loadingMessage = document.getElementById('loading-message');
+            const questionSection = document.getElementById('question-section');
+            const questionText = document.getElementById('question-text');
+            const optionsDiv = document.getElementById('options');
+            const tokenInput = document.getElementById('token');
+            const submitButton = document.querySelector('button[type="submit"]');
+            const MIN_ANSWER_DELAY_MS = 5000;
+
+            try {
+                const response = await fetch('/fetch-question');
+                const data = await response.json();
+
+                // Populate question and options
+                questionText.textContent = data.question;
+                tokenInput.value = data.token;
+                data.options.forEach((option, index) => {
+                    const optionLetter = String.fromCharCode(65 + index); // A, B, C, D
+                    const div = document.createElement('div');
+                    div.className = 'choice';
+                    div.innerHTML = `
+                        <input type="radio" id="option-${optionLetter}" name="answer" value="${optionLetter}" required>
+                        <label for="option-${optionLetter}">${option}</label>
+                    `;
+                    optionsDiv.appendChild(div);
+                });
+
+                // Show question section and hide loading message
+                loadingMessage.style.display = 'none';
+                questionSection.style.display = 'block';
+
+                // Enable submit button after delay
+                const questionTimestamp = Date.now();
+                const updateButtonState = () => {
+                    const timeElapsed = Date.now() - questionTimestamp;
+                    if (timeElapsed >= MIN_ANSWER_DELAY_MS) {
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Submit Answer';
+                    } else {
+                        submitButton.disabled = true;
+                        submitButton.textContent = `Wait ${Math.ceil((MIN_ANSWER_DELAY_MS - timeElapsed) / 1000)}s`;
+                    }
+                };
+                updateButtonState();
+                setInterval(updateButtonState, 1000);
+            } catch (error) {
+                console.error('Error fetching question:', error);
+                loadingMessage.innerHTML = '<h2>Error loading question. Please try again.</h2>';
+            }
+        });
+    </script>
+</body>
+</html>
