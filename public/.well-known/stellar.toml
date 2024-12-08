@@ -1,0 +1,19 @@
+# The Stellar network to which this TOML file applies
+NETWORK_PASSPHRASE="Public Global Stellar Network ; September 2015"
+
+# Accounts
+ACCOUNTS=[
+    "GC7OC7AJW6K7NMCUCPRQEZQWMGGQTF5DQQZPWH5CQ4TSI5JVD5RQNCLP", # Distributing Account
+    "GCXDWF3K3J2T7ROWH7BBTZHG3DMKAVJBQB5M73OOMOU65HQBZVWVCCAI"  # Issuing Account
+]
+
+# Token Metadata
+[[CURRENCIES]]
+code="FELNY"
+issuer="GCXDWF3K3J2T7ROWH7BBTZHG3DMKAVJBQB5M73OOMOU65HQBZVWVCCAI"
+status="active"
+display_decimals=2
+name="FeliniCoin"
+desc="FeliniCoin is a cryptocurrency distributed through trivia games. 90% of all FELNY will be distributed through this platform."
+conditions="Earn FELNY by answering AI-generated trivia questions on our platform. Rewards diminish over time based on the supply."
+image="https://felinicoins.com/images/felny_logo.png"

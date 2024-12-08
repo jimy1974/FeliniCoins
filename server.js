@@ -689,3 +689,21 @@ app.post('/process-withdrawal', async (req, res) => {
     }
 });
 
+
+
+app.get('/users', async (req, res) => {
+    try {
+        // Fetch all users from the database
+        const users = await FeliniUser.findAll({
+            attributes: ['id', 'username', 'email', 'tokens'], // Select specific fields
+            order: [['tokens', 'DESC']] // Optional: Order by tokens descending
+        });
+
+        // Render the users.ejs file, passing the users data
+        res.render('users', { users });
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).send('Error fetching users.');
+    }
+});
+
