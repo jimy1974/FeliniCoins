@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About FeliniCoin</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<style>
+    .about-section {
+        text-align: left; /* Align text content to the left */
+        margin: 0 auto; /* Center the section in the container */
+        max-width: 600px; /* Optional: Constrain the section width for better readability */
+    }
+
+    .about-section ul {
+        list-style-position: inside; /* Ensure bullets are aligned with the text */
+        margin: 0 auto; /* Center-align the list within the section */
+        padding: 0; /* Remove default padding */
+        text-align: left; /* Align the list text to the left */
+    }
+
+    .about-section ul li {
+        margin-bottom: 10px; /* Add spacing between list items */
+        line-height: 1.6; /* Increase line height for readability */
+    }
+
+</style>
+
+<body>
+    <div class="container">
+        <!-- Buttons for Navigation -->
+        <div class="top-buttons">
+            <a href="/" class="subtle-btn">Home</a>
+            <a href="/withdraw" class="subtle-btn">Withdraw Tokens</a>
+            <a href="https://stellarterm.com/exchange/FELNY-GCXDWF3K3J2T7ROWH7BBTZHG3DMKAVJBQB5M73OOMOU65HQBZVWVCCAI/XLM-native" class="subtle-btn" target="_blank">Sell Tokens</a>
+            <a href="/about" class="subtle-btn">About the Token</a>
+            <% if (user) { %>
+                <a href="/logout" class="subtle-btn">Logout</a>
+            <% } else { %>
+                <a href="/auth/google" class="subtle-btn">Login</a>
+            <% } %>
+        </div>
+
+        <!-- About Section -->
+        <h1>About FeliniCoin</h1>
+        <div class="about-section">
+            <h2>The Vision</h2>
+            <p>
+                FeliniCoin (FELNY) is a groundbreaking project designed to reward knowledge, curiosity, and engagement.
+                Our goal is to distribute <strong>90% of all FELNY tokens</strong> to participants through our AI-powered trivia game.
+            </p>
+        </div>
+
+        <div class="about-section">
+            <h2>How It Works</h2>
+            <ul>
+                <li>Answer fun, AI-generated trivia questions to earn FELNY tokens.</li>
+                <li>Rewards diminish gradually over time, based on the distribution wallet's balance.</li>
+                <li>Withdraw your FELNY tokens directly to your Stellar wallet.</li>
+                <li>Trade FELNY tokens on Stellar exchanges or hold them as a reward for your participation.</li>
+            </ul>
+        </div>
+
+        <div class="about-section">
+            <h2>What Are FELNY Tokens?</h2>
+            <p>
+                FELNY is a digital token issued on the Stellar network. It represents your rewards for engaging with
+                our platform. FELNY tokens are tradable, and you can view their real-time value on exchanges like StellarTerm.
+            </p>
+        </div>
+
+        <div class="about-section">
+            <h2>Get Started</h2>
+            <p>
+                Getting started is simple:
+            </p>
+            <ol>
+                <li><strong>Login:</strong> Use your Google account to sign in securely.</li>
+                <li><strong>Play:</strong> Answer trivia questions and earn tokens.</li>
+                <li><strong>Withdraw:</strong> Transfer your FELNY tokens to your Stellar wallet with ease.</li>
+                <li><strong>Trade:</strong> Explore trading opportunities on Stellar exchanges.</li>
+            </ol>
+        </div>
+
+        <div class="about-section" >
+            <h2>Join the Fun!</h2>
+            <p>
+                FeliniCoin is more than just a trivia game—it's a unique way to earn and engage with cryptocurrency.
+                Start playing today and be part of the future of digital rewards!
+            </p>
+        </div>
+    </div>
+</body>
+</html>

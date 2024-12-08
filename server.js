@@ -60,17 +60,17 @@ const distributionKeys = StellarSdk.Keypair.fromSecret(distributionSecret);
 const FELNY = new StellarSdk.Asset('FELNY', process.env.ISSUER_PUBLIC_KEY ); // Replace with your issuer public key
 
 
-// Load the files at startup
-const adjectives = fs.readFileSync('adjectives.txt', 'utf8').split('\n').map(line => line.trim()).filter(Boolean);
-const subjects = fs.readFileSync('subjects.txt', 'utf8').split('\n').map(line => line.trim()).filter(Boolean);
 
-// Function to get random combinations of adjectives and subjects
-function getRandomAdjectiveSubjectPair() {
-    const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-    //const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
-    const randomAdjective2 = adjectives[Math.floor(Math.random() * adjectives.length)];
-    
-    return `${randomAdjective} ${randomAdjective2}`;
+// Load the pre-generated questions into memory at startup
+const questionsFile = 'generated_questions.json';
+let questions = [];
+
+try {
+    const fileData = fs.readFileSync(questionsFile, 'utf8');
+    questions = JSON.parse(fileData);
+    console.log(`Loaded ${questions.length} questions from ${questionsFile}`);
+} catch (error) {
+    console.error(`Error loading questions from ${questionsFile}:`, error);
 }
 
 // Game State Management
@@ -81,79 +81,63 @@ class FunnyIQGame {
         this.currentDifficulty = state.currentDifficulty || 1; // Start at medium difficulty
     }
 
-    // generateQuestion Method
-    async generateQuestion(difficultyLevel = this.currentDifficulty) {
-        const difficultyName = this.difficulties[difficultyLevel];
+    // generateQuestion Method (Modified to use pre-generated questions)
+    generateQuestion() {
+        if (questions.length === 0) {
+            console.error("No questions available. Please check the questions file.");
+            return {
+                question: "Error: No questions available.",
+                options: [],
+                answer: "N/A",
+                explanation: "Please contact support.",
+            };
+        }
+
+        const randomIndex = Math.floor(Math.random() * questions.length);
+        const selectedQuestion = questions[randomIndex];
+        const questionText = selectedQuestion.question;
 
         try {
-            // Generate three random adjective-subject pairs
-            const randomPairs = Array.from({ length: 3 }, () => getRandomAdjectiveSubjectPair()).join(', ');
+            // Extract the question
+            const questionMatch = questionText.match(/Question:\s*(.+?)(?=\nOptions:)/s);
+            const question = questionMatch ? questionMatch[1].trim() : null;
 
-            console.log(randomPairs);
-
-            const response = await openai.chat.completions.create({
-                model: "gpt-4",
-                messages: [
-                    {
-                        role: "system",
-                        content: "You are a question generator. Each question must be unique and thought-provoking."
-                    },
-                    {
-                        role: "user",
-                        content: `Please create a very funny and creative multi-choice question, taking some inspiration from the following words: ${randomPairs}.                      
-                      - Include 5 unique options (A, B, C, D, E).
-                      - Keep the explanation brief (1-2 sentences).
-                      Format the response as:
-
-Question: [Your Question]
-
-Options:
-A: [Option A]
-B: [Option B]
-C: [Option C]
-D: [Option D]
-E: [Option E]
-
-Answer: [Correct Option only include the LETTER]
-
-Explanation: [One to two sentences explaining why the answer is correct, but don't ruin the joke or humour by saying why it's funny, logical or creative.]`
-                    }
-                ],
-                max_tokens: 300,
-                temperature: 0.9
-            });
-
-            const content = response.choices[0].message.content;
-
-            // Extract question, options, and explanation
-            const questionMatch = content.match(/Question:\s*(.+?)(?=\nOptions:)/s);
-            const optionsMatch = content.match(/Options:\s*((?:A: .+\n?)+)/s);
-            const answerMatch = content.match(/Answer:\s*(.+?)(?=\nExplanation:)/s);
-            const explanationMatch = content.match(/Explanation:\s*(.+)/s);
-
+            // Extract the options
+            const optionsMatch = questionText.match(/Options:\s*((?:A: .+\n?)+)/s);
             let options = [];
             if (optionsMatch) {
                 const optionsText = optionsMatch[1].trim();
-                const lines = optionsText.split('\n');
-                lines.forEach(line => {
+                options = optionsText.split('\n').map(line => {
                     const optionMatch = line.match(/^[A-E]:\s*(.+)$/);
-                    if (optionMatch) {
-                        options.push(optionMatch[1].trim());
-                    }
-                });
+                    return optionMatch ? optionMatch[1].trim() : null;
+                }).filter(Boolean);
             }
 
+            // Extract the answer
+            const answerMatch = questionText.match(/Answer:\s*([A-E])/);
+            const answer = answerMatch ? answerMatch[1].trim() : null;
+
+            // Extract the explanation
+            const explanationMatch = questionText.match(/Explanation:\s*(.+)/s);
+            const explanation = explanationMatch ? explanationMatch[1].trim() : null;
+
             return {
-                question: questionMatch ? questionMatch[1].trim() : "No question provided.",
-                options,
-                answer: answerMatch ? answerMatch[1].trim().toUpperCase() : "No answer provided.",
-                explanation: explanationMatch ? explanationMatch[1].trim() : "No explanation provided."
+                question: question || "No question found.",
+                options: options.length > 0 ? options : ["No options available."],
+                answer: answer || "No answer provided.",
+                explanation: explanation || "No explanation available.",
             };
         } catch (error) {
-            console.error("Question generation error:", error);
-            return null;
+            console.error("Error parsing question:", error);
+            return {
+                question: "Error parsing question.",
+                options: ["N/A"],
+                answer: "N/A",
+                explanation: "Error encountered while parsing.",
+            };
         }
     }
+
 
     processAnswer(isCorrect, difficulty) {
         let reward = 0;
@@ -166,16 +150,16 @@ Explanation: [One to two sentences explaining why the answer is correct, but don
         return {
             balance: this.balance,
             difficulty: this.difficulties[this.currentDifficulty],
-            reward: reward
+            reward: reward,
         };
     }
 
     getPayoutMultiplier(difficulty) {
         const payoutMultipliers = {
-            'easy': 100,
-            'medium': 500,
-            'hard': 1000,
-            'very_hard': 2000
+            easy: 100,
+            medium: 500,
+            hard: 1000,
+            very_hard: 2000,
         };
         return payoutMultipliers[difficulty] || 100;
     }
@@ -191,9 +175,6 @@ Explanation: [One to two sentences explaining why the answer is correct, but don
         return new FunnyIQGame(state);
     }
 }
-
-
-
 
 
 //// GOOGLE LOGIN
@@ -293,14 +274,23 @@ app.get('/auth/google/callback',
 
 
 // Helper functions
+let cachedBalance = 0;
+let lastBalanceFetchTime = 0;
+const BALANCE_FETCH_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+
 async function getTotalSiteBalance() {
-    // Fetch the current total FELNY balance for the distribution account
-    const account = await server.loadAccount(distributionKeys.publicKey());
-    const balance = account.balances.find(
-        (b) => b.asset_code === 'FELNY' && b.asset_issuer === process.env.ISSUER_PUBLIC_KEY
-    );
-    return balance ? parseFloat(balance.balance) : 0;
+    const now = Date.now();
+    if (now - lastBalanceFetchTime > BALANCE_FETCH_INTERVAL_MS) {
+        const account = await server.loadAccount(distributionKeys.publicKey());
+        const balance = account.balances.find(
+            (b) => b.asset_code === 'FELNY' && b.asset_issuer === process.env.ISSUER_PUBLIC_KEY
+        );
+        cachedBalance = balance ? parseFloat(balance.balance) : 0;
+        lastBalanceFetchTime = now;
+    }
+    return cachedBalance;
 }
+
 
 async function awardTokens(destinationWallet, amount) {
     // Send tokens from the distribution account to the specified wallet
@@ -388,6 +378,12 @@ app.get('/logout', (req, res) => {
 });
 
 
+app.get('/about', (req, res) => {
+    res.render('about', { user: req.user || null });
+});
+
+
+
 app.get('/start', async (req, res) => {
     try {
         if (!req.session.gameState) {
@@ -413,13 +409,15 @@ app.get('/start', async (req, res) => {
     }
 });
 
-// New endpoint to fetch question asynchronously
-app.get('/fetch-question', async (req, res) => {
+app.get('/fetch-question', (req, res) => {
     try {
-        const game = FunnyIQGame.fromJSON(req.session.gameState);
-        const questionData = await game.generateQuestion(game.currentDifficulty);
+        const game = FunnyIQGame.fromJSON(req.session.gameState || {});
 
-        if (!questionData) {
+        console.log('Fetching question...');
+        const questionData = game.generateQuestion();
+
+        if (!questionData || !questionData.question) {
+            console.error('No question data returned.');
             return res.status(500).send('Error generating question.');
         }
 
@@ -436,17 +434,23 @@ app.get('/fetch-question', async (req, res) => {
             answered: false,
         };
 
+        console.log('Generated question:', questionData);
         res.json({
             token: questionToken,
             question: questionData.question,
             options: questionData.options,
         });
     } catch (error) {
-        console.error('Error fetching question:', error);
+        console.error('Error fetching question:', error.stack || error);
         res.status(500).json({ error: 'Error fetching question.' });
     }
 });
 
+
+function calculateReward(totalBalance, difficultyMultiplier) {
+    const baseReward = Math.floor(totalBalance / 1000000); // Adjust divisor for scaling
+    return Math.max(Math.floor(baseReward * difficultyMultiplier), 1); // Ensure minimum reward of 1
+}
 
 
 
@@ -459,7 +463,6 @@ const answerLimiter = rateLimit({
 // Handle answer submission
 const MIN_ANSWER_DELAY_MS = 5000; // 5 seconds delay to prevent automated abuse
 
-//app.post('/answer', async (req, res) => {
 app.post('/answer', async (req, res) => {
     try {
         if (!req.session.gameState || !req.session.currentQuestion) {
@@ -480,7 +483,7 @@ app.post('/answer', async (req, res) => {
         if (currentQuestion.answered) {
             return res.render('result', {
                 isCorrect: currentQuestion.isCorrect,
-                reward: currentQuestion.isCorrect ? game.getPayoutMultiplier(currentQuestion.difficulty.toLowerCase().replace(' ', '_')) : 0,
+                reward: currentQuestion.reward || 0, // Use the stored reward
                 explanation: currentQuestion.explanation,
                 balance: game.balance,
                 user: req.user || null,
@@ -496,6 +499,24 @@ app.post('/answer', async (req, res) => {
 
         const correctAnswer = currentQuestion.answer.trim().charAt(0).toUpperCase();
         const isCorrect = answer.trim().charAt(0).toUpperCase() === correctAnswer;
+
+        // Fetch the total site balance dynamically
+        const totalSiteBalance = await getTotalSiteBalance();
+
+        // Difficulty multiplier for reward scaling
+        const difficultyMultipliers = {
+            easy: 0.5,
+            medium: 1.0,
+            hard: 1.5,
+            very_hard: 2.0,
+        };
+        const difficultyMultiplier = difficultyMultipliers[currentQuestion.difficulty.toLowerCase().replace(' ', '_')] || 1;
+
+        // Calculate the reward dynamically
+        const reward = isCorrect ? calculateReward(totalSiteBalance, difficultyMultiplier) : 0;
+
+        // Store the reward in the session
+        req.session.currentQuestion.reward = reward;
 
         const gameState = game.processAnswer(isCorrect, currentQuestion.difficulty.toLowerCase().replace(' ', '_'));
 
@@ -520,7 +541,7 @@ app.post('/answer', async (req, res) => {
 
         res.render('result', {
             isCorrect,
-            reward: isCorrect ? gameState.reward : 0,
+            reward: reward, // Dynamically calculated reward
             explanation: currentQuestion.explanation,
             balance: gameState.balance,
             user: req.user || null,
@@ -530,6 +551,7 @@ app.post('/answer', async (req, res) => {
         res.status(500).send('Error processing your answer.');
     }
 });
+
 
 
 

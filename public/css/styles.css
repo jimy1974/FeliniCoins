@@ -77,6 +77,7 @@ input[type="radio"] {
     color: #3423a6; /* Match the FeliniCoin theme */
 }
 
+
 .rules ul {
     list-style-position: inside; /* Ensures bullets are aligned with text */
     margin: 0 auto; /* Centers the list as a whole */
