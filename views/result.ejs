@@ -6,43 +6,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <div class="container">        
-        <!-- Buttons for Navigation -->
-        <div class="top-buttons">
-            <a href="/" class="subtle-btn">Home</a>
-            <a href="/withdraw" class="subtle-btn">Withdraw Tokens</a>
-            <a href="https://stellarterm.com/exchange/FELNY-GCXDWF3K3J2T7ROWH7BBTZHG3DMKAVJBQB5M73OOMOU65HQBZVWVCCAI/XLM-native" class="subtle-btn" target="_blank">Sell Tokens</a>
-            <a href="/about" class="subtle-btn">About the Token</a>
+    <div class="background-stars" id="star-container"></div>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="top-navigation">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/withdraw" class="nav-link">Withdraw</a>
+            <a href="https://stellarterm.com/exchange/FELNY-GCXDWF3K3J2T7ROWH7BBTZHG3DMKAVJBQB5M73OOMOU65HQBZVWVCCAI/XLM-native" class="nav-link" target="_blank">Sell Tokens</a>
+            <a href="/about" class="nav-link">About</a>
             <% if (user) { %>
-                <a href="/logout" class="subtle-btn">Logout</a>
+                <a href="/logout" class="nav-link">Logout</a>
             <% } else { %>
-                <a href="/auth/google" class="subtle-btn">Login</a>
+                <a href="/auth/google" class="nav-link">Login</a>
             <% } %>
-        </div>
+        </nav>
 
-        <h1>Result</h1>
+        <!-- Result Section -->
+        <section class="header-section">
+            <h1>Result</h1>
+            <% if (isCorrect) { %>
+                <p class="success">Correct! You earned <strong><%= reward %></strong> FELNY!</p>
+            <% } else { %>
+                <p class="failure">Incorrect. Better luck next time!</p>
+            <% } %>
+        </section>
 
-        <% if (isCorrect) { %>
-            <p class="success">Correct! You earned <%= reward %> FELNY!</p>
-        <% } else { %>
-            <p class="failure">Incorrect. Better luck next time!</p>
-        <% } %>
 
-        <p><strong>Explanation:</strong> <%= explanation %></p>
+        <!-- Explanation Section -->
+        <section class="rules-section">
+            <h2>Explanation</h2>
+            <p><%= explanation %></p>
+        </section>
 
-        <!-- Updated Balance -->
-        <div class="wallet-info">
+        <!-- Wallet Info -->
+        <section class="wallet-info">
             <h2>Your FELNY Balance</h2>
-            <p>
-                <strong><%= balance %> FELNY</strong>
-            </p>
-        </div>
+            <p><strong><%= balance %> FELNY</strong></p>
+        </section>
 
         <!-- Next Step -->
-        <a href="/start" class="btn">Next Question</a>
+        <a href="/start" class="cta-button">Next Question</a>
     </div>
+    <script src="/js/script.js"></script>
 </body>
 </html>

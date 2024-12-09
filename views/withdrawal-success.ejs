@@ -4,16 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Withdrawal Successful</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+    <div class="background-stars" id="star-container"></div>
     <div class="container">
-        <h1>Withdrawal Successful</h1>
-        <p>You have successfully withdrawn <strong><%= amount %> FELNY</strong> to the following Stellar wallet:</p>
-        <p class="wallet-address" title="<%= walletAddress %>">
-            <%= walletAddress %>
-        </p>
-        <a href="/" class="btn">Back to Home</a>        
+        <!-- Header Section -->
+        <section class="header-section">
+            <h1>Withdrawal Successful</h1>
+            <p>You have successfully withdrawn <strong><%= amount %> FELNY</strong> to the following Stellar wallet:</p>
+            <p class="wallet-address" title="<%= walletAddress %>"><%= walletAddress %></p>
+        </section>
+
+        <!-- Back to Home Button -->
+        <a href="/" class="cta-button">Back to Home</a>
     </div>
+    <script src="/js/script.js"></script>
 </body>
 </html>

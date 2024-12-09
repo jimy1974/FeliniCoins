@@ -5,82 +5,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
     <title>FeliniCoin Trivia Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+    <div class="background-stars" id="star-container"></div>
     <div class="container">
-
-        <!-- Buttons for Navigation -->
-        <div class="top-buttons">
-            <a href="/" class="subtle-btn">Home</a>
-            <a href="/withdraw" class="subtle-btn">Withdraw Tokens</a>
-            <a href="https://stellarterm.com/exchange/FELNY-GCXDWF3K3J2T7ROWH7BBTZHG3DMKAVJBQB5M73OOMOU65HQBZVWVCCAI/XLM-native" class="subtle-btn" target="_blank">Sell Tokens</a>
-            <a href="/about" class="subtle-btn">About the Token</a>
+        <!-- Navigation -->
+        <nav class="top-navigation">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/withdraw" class="nav-link">Withdraw</a>
+            <a href="https://stellarterm.com/exchange/FELNY-GCXDWF3K3J2T7ROWH7BBTZHG3DMKAVJBQB5M73OOMOU65HQBZVWVCCAI/XLM-native" class="nav-link" target="_blank">Sell Tokens</a>
+            <a href="/about" class="nav-link">About</a>
             <% if (user) { %>
-                <a href="/logout" class="subtle-btn">Logout</a>
+                <a href="/logout" class="nav-link">Logout</a>
             <% } else { %>
-                <a href="/auth/google" class="subtle-btn">Login</a>
+                <a href="/auth/google" class="nav-link">Login</a>
             <% } %>
-        </div>
+        </nav>
 
+        <!-- Header Section -->
+        <section class="header-section">
+            <img src="/images/FeliniCoin_small.png" alt="FeliniCoin Logo" class="logo">
+            <h1>FeliniCoin</h1>
+            <p>Earn crypto by answering intriguing questions</p>
+        </section>
 
+        <!-- Call-to-Action Button -->
+        <% if (!user) { %>
+            <button class="cta-button" id="start-game">Login to Start</button>
+        <% } else { %>
+            <a href="/start" class="cta-button">Start Earning FELNY</a>
+        <% } %>
 
-        <!-- Header with Logo -->
-        <div class="header-with-image">
-            <h1>
-                <img src="/images/FeliniCoin_small.png" alt="FeliniCoin Logo" class="title-icon">
-                FeliniCoin
-            </h1>
-        </div>
-
-        <p>Answer questions, earn <strong>FELNY</strong> tokens</p>
-
-        <!-- Wallet Information -->
-        <div class="wallet-info">
-            <h3>Tokens Available: <%= totalSiteBalance %> FELNY</h3>
-        </div>
-
-        <!-- Start Game -->
-        <a  id="google-auth-button" class="btn">Login</a>
-
-        <!-- Rules -->
-        <div class="rules">
+        <!-- Rules Section -->
+        <section class="rules-section">
             <h2>How to Play</h2>
-            <ul>
-                <li>Answer random AI questions to earn FELNY tokens.</li>
-                <li>Withdraw your tokens to your Stellar wallet.</li>          
+            <ul class="rules-list">
+                <li>Answer fascinating AI-generated questions</li>
+                <li>Earn FELNY tokens for each correct response</li>
+                <li>Withdraw tokens to your Stellar wallet</li>
             </ul>
-        </div>
+        </section>
     </div>
-<script>
-    // script.js
-    let isPublic = false;
 
-    document.addEventListener('DOMContentLoaded', () => {
-        
-      // Handle Google Authentication Button Click
-      const googleAuthButton = document.getElementById('google-auth-button');
-      if (googleAuthButton) {
-           googleAuthButton.addEventListener('click', () => {
-               
-           // Redirect to Google OAuth endpoint
-           window.location.href = '/auth/google';
-
-                // Redirect logged-in users to /start
-                <% if (user) { %>
-                    window.location.href = '/start';
-                <% } else { %>
-                    // Redirect to Google OAuth endpoint
-                    window.location.href = '/auth/google';
-                <% } %>
-           });
-        }
-   });
-
-</script>
-    
-</body>    
+    <script src="/js/script.js"></script>
+</body>
 </html>
-

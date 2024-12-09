@@ -1,217 +1,346 @@
-/* public/css/styles.css */
+:root {
+    --primary-color: #3423a6;
+    --secondary-color: #ffd700;
+    --background-gradient: linear-gradient(135deg, #0d0d2b, #3423a6);
+    --text-color: #f0f0f0;
+    --card-background: rgba(240, 240, 240, 0.95); /* Adjusted to a slightly darker off-white */
+}
 
 body {
-    font-family: 'Inter', Arial, sans-serif;
-    background: linear-gradient(135deg, #0d0d2b, #3423a6); /* Purple with depth */
-    color: #e0e0e0;
+    font-family: 'Poppins', Arial, sans-serif;
+    background: var(--background-gradient);
+    color: var(--text-color);
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    line-height: 1.6;
+    overflow-y: auto; /* Allow vertical scrolling */
 }
 
+.background-stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.7;
+}
+
+/* Container Styling */
 .container {
-    background-color: rgba(255, 255, 255, 0.95);  /* Lighter, more opaque background */
-    color: #0f1020;  /* Dark text for contrast */
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    padding: 40px;
+    background: var(--card-background);
+    color: #0f1020;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    padding: 20px; /* Reduced padding */
     width: 100%;
     max-width: 500px;
+    height: auto;
+    overflow-y: auto; /* Enable scrolling for overflowing content */
     text-align: center;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(0,0,0,0.1);
+    position: relative;
+    transition: box-shadow 0.3s ease;
 }
 
-.btn {
-    background: linear-gradient(45deg, #ffd700, #ffcc5c); /* Gold for FeliniCoin vibe */
-    color: #000; /* Dark text for contrast */
-    border: none;
+.container:hover {
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Navigation */
+.top-navigation {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.nav-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: var(--secondary-color);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--secondary-color);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Header Section */
+.header-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px; /* Reduced margin for better spacing */
+    gap: 5px; /* Minimal gap between elements */
+}
+
+.header-section h1 {
+    color: #000;
+    margin: 0;
+    font-size: 2rem; /* Reduced font size for better layout */
+}
+
+.header-section p {
+    color: #333;
+    font-size: 1rem;
+    max-width: 300px;
+    margin: 0; /* Removed extra margins */
+}
+
+/* Logo */
+.logo {
+    width: 60px; /* Reduced size */
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px; /* Reduced spacing below logo */
     transition: transform 0.3s ease;
-    padding: 10px 20px;
-    border-radius: 5px;
-    margin-top: 15px;
+}
+
+.logo:hover {
+    transform: scale(1.1);
+}
+
+/* Call-to-Action Button */
+.cta-button {
+    background: linear-gradient(45deg, var(--secondary-color), #ffcc5c);
+    color: #000;
+    border: none;
+    padding: 10px 20px; /* Slightly smaller padding */
+    border-radius: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
     cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
 }
 
-.btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(255, 204, 92, 0.4);
+.cta-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4);
 }
 
-.game-info {
-    background-color: rgba(26, 41, 128, 0.1);
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 20px;
+/* Rules Section */
+.rules-section {
+    background-color: rgba(52, 35, 166, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: left; /* Aligns content neatly inside the section */
+    max-width: 500px; /* Prevents the section from being too wide */
+    margin-left: auto;
+    margin-right: auto; /* Centers the section */
 }
 
-input[type="radio"] {
-    margin-right: 10px;
-    transform: scale(1.2); /* Make radio buttons slightly larger */
+
+.rules-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
 }
 
-.choice {
-    margin: 10px 0;
+.rules-list {
+    list-style-type: none;
+    text-align: left;
+}
+
+.rules-list li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.rules-list li::before {
+    content: '✨';
+    position: absolute;
+    left: 0;
+    top: 2px;
+}
+
+/* Question Section */
+.question {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    max-height: 70vh; /* Limit height for better layout */
+    overflow-y: auto; /* Enable scrolling for large content */
+    margin: 10px 0; /* Minimal vertical spacing */
 }
 
 .question h2 {
     font-size: 1.4rem;
-    color: #000000; /* Highlight question text */
+    color: #0f1020;
+    margin-bottom: 20px;
 }
 
+/* Options */
+.options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.options label {
+    font-size: 1rem;
+    color: #0f1020;
+}
+
+/* Wallet Info */
+.wallet-info h2 {
+    font-size: 1.2rem;
+    color: #3423a6; /* Theme color for title */
+}
+
+.wallet-info p {
+    font-size: 1rem;
+    color: #0f1020; /* Dark text for balance */
+}
+
+.cta-button, .btn {
+    background: linear-gradient(45deg, var(--secondary-color), #ffcc5c);
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+    margin-top: 20px; /* Increased space above the button */
+}
+
+.cta-button:hover, .btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4);
+}
+
+
+/* Twinkling Stars */
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
 .success {
-    color: #2ecc71;
+    color: #2ecc71 !important; /* Green for success */
     font-weight: bold;
 }
 
 .failure {
-    color: #e74c3c;
+    color: #e74c3c !important; /* Ensures red color is applied */
     font-weight: bold;
-}
-
-.wallet-info h2, .wallet-info h3 {
-    color: #3423a6; /* Match the FeliniCoin theme */
+    text-align: center;
 }
 
 
-.rules ul {
-    list-style-position: inside; /* Ensures bullets are aligned with text */
-    margin: 0 auto; /* Centers the list as a whole */
-    padding: 0; /* Removes default padding */
-    text-align: left; /* Aligns text to the left */
-    max-width: 400px; /* Optional: Limits the width of the list */
+
+.rules-section {
+    background-color: rgba(52, 35, 166, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: left;
 }
 
-.rules ul li {
-    margin-bottom: 10px; /* Adds spacing between list items */
-    line-height: 1.6; /* Adjusts line height for readability */
-}
-
-#loader {
-    font-size: 16px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-.btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-#actionButton:disabled::after {
-    content: '...';
-    display: inline-block;
-    margin-left: 10px;
-    animation: spin 1s linear infinite;
+.rules-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
 }
 
 
-.top-buttons {
+.top-navigation {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 15px;
+    margin-bottom: 30px;
 }
 
-.top-buttons .btn {
-    padding: 8px 16px;
-    font-size: 14px;
+.nav-link {
+    color: var(--primary-color);
     text-decoration: none;
-    display: inline-block;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
 }
 
-.top-buttons .btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(255, 204, 92, 0.4);
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: var(--secondary-color);
+    transition: width 0.3s ease;
 }
 
-.subtle-btn {
-    background-color: rgba(52, 35, 166, 0.1); /* Subtle background */
-    color: #3423a6; /* Text matches theme */
-    border: 1px solid rgba(52, 35, 166, 0.3); /* Subtle border */
-    padding: 8px 12px;
+.nav-link:hover {
+    color: var(--secondary-color);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5em;
+    color: #0f1020; /* Dark text for visibility */
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8em;
+    font-size: 1rem;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 14px;
-    text-decoration: none;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.form-group input:focus {
+    border-color: #3423a6; /* Match theme color */
+    outline: none;
+    box-shadow: 0 0 5px rgba(52, 35, 166, 0.5);
+}
+
+.form-group input {
+    width: 100%; /* Input fills the parent container */
+    max-width: 480px; /* Prevents it from becoming too wide */
+    padding: 0.8em; /* Adds internal spacing */
+    font-size: 1rem; /* Uniform font size */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* Ensures padding is included in width calculation */
+    margin: 0 auto; /* Centers the input within the container */
 }
 
 
-.subtle-btn:hover {
-    background-color: rgba(52, 35, 166, 0.2); /* Slightly darker on hover */
-    transform: scale(1.03);
-}
-
-.header-with-image h1 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-size: 24px; /* Adjusted font size for title */
-}
-
-.title-icon {
-    
-    vertical-align: middle;
-}
-
-
-
-.wallet-address {
-    word-break: break-word; /* Break long words */
-    overflow-wrap: break-word;
-    white-space: nowrap; /* Prevent wrapping */
-    overflow: hidden; /* Hide overflow */
-    text-overflow: ellipsis; /* Add ellipsis for overflowed text */
-    max-width: 100%; /* Ensure it fits the container */
-    display: inline-block;
-}
-
-
-    .loading h2 {
-        font-size: 1.5rem;
-        text-align: center;
-    }
-
-    .loading-dots {
-        display: inline-block;
-    }
-
-    .dot {
-        width: 8px;
-        height: 8px;
-        margin: 0 2px;
-        background-color: #000;
-        border-radius: 50%;
-        display: inline-block;
-        animation: bounce 1.5s infinite;
-    }
-
-    .dot:nth-child(1) {
-        animation-delay: 0s;
-    }
-
-    .dot:nth-child(2) {
-        animation-delay: 0.2s;
-    }
-
-    .dot:nth-child(3) {
-        animation-delay: 0.4s;
-    }
-
-    @keyframes bounce {
-        0%, 80%, 100% {
-            transform: scale(0);
-        }
-        40% {
-            transform: scale(1);
-        }
-    }

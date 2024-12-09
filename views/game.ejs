@@ -6,31 +6,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trivia Question</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+    <div class="background-stars" id="star-container"></div>
     <div class="container">
-        <!-- Buttons for Navigation -->
-        <div class="top-buttons">
-            <a href="/" class="subtle-btn">Home</a>
-            <a href="/withdraw" class="subtle-btn">Withdraw Tokens</a>
-            <a href="https://stellarterm.com/exchange/FELNY-GCXDWF3K3J2T7ROWH7BBTZHG3DMKAVJBQB5M73OOMOU65HQBZVWVCCAI/XLM-native" class="subtle-btn" target="_blank">Sell Tokens</a>
-            <a href="/about" class="subtle-btn">About the Token</a>
+        <!-- Navigation -->
+        <nav class="top-navigation">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/withdraw" class="nav-link">Withdraw</a>
+            <a href="https://stellarterm.com/exchange/FELNY-GCXDWF3K3J2T7ROWH7BBTZHG3DMKAVJBQB5M73OOMOU65HQBZVWVCCAI/XLM-native" class="nav-link" target="_blank">Sell Tokens</a>
+            <a href="/about" class="nav-link">About</a>
             <% if (user) { %>
-                <a href="/logout" class="subtle-btn">Logout</a>
+                <a href="/logout" class="nav-link">Logout</a>
             <% } else { %>
-                <a href="/auth/google" class="subtle-btn">Login</a>
+                <a href="/auth/google" class="nav-link">Login</a>
             <% } %>
-        </div>
+        </nav>
 
-        <!-- Header with Logo -->
-        <div class="header-with-image">
-            <h1>
-                <img src="/images/FeliniCoin_small.png" alt="FeliniCoin Logo" class="title-icon">
-                FeliniCoin
-            </h1>
-        </div>
-        <p>Answer the question below to earn <strong>FELNY</strong> tokens!</p>
+        <!-- Header Section -->
+        <section class="header-section">
+            <img src="/images/FeliniCoin_small.png" alt="FeliniCoin Logo" class="logo">
+            <h1>FeliniCoin</h1>
+            <p>Answer questions to earn <strong>FELNY</strong> tokens!</p>
+        </section>
 
         <!-- Loading Message -->
         <div id="loading-message" class="loading">
@@ -43,26 +43,26 @@
             </h2>
         </div>
 
-
-        <!-- Question Section (hidden initially) -->
+        <!-- Question Section -->
         <div id="question-section" class="question" style="display: none;">
             <h2 id="question-text"></h2>
             <form action="/answer" method="post">
                 <input type="hidden" name="token" id="token">
-                <div id="options"></div>
-                <button type="submit" class="btn" disabled>Submit Answer</button>
+                <div id="options" class="options"></div>
+                <button type="submit" class="cta-button" disabled>Submit Answer</button>
             </form>
         </div>
 
         <!-- User's Token Balance -->
-        <div class="wallet-info">
+        <section class="wallet-info">
             <h2>Your FELNY Balance</h2>
             <p>
                 <strong><%= balance %> FELNY</strong>
             </p>
-        </div>
+        </section>
     </div>
 
+    <script src="/js/script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const loadingMessage = document.getElementById('loading-message');
